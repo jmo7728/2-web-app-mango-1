@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up - Pomodoro App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/signup.css">
+</head>
+<body>
+    <div class="container">
+        <header class="title">
+            <h1>Create an Account</h1>
+            <p class="tagline">Join and start your productivity journey!</p>
+        </header>
+
+        <div class="signup-card">
+            <!-- Flask route to home page -->
+            <form action="/home" method="post">
+                <label for="username">Username</label>
+                <input class="text" type="text" id="username" name="username" placeholder="Enter username" required>
+
+                <label for="password">Password</label>
+                <input class="password" type="password" id="password" name="password" placeholder="Enter password" required>
+
+                <button class="submit" type="submit">Sign Up</button>
+                <a href="/login" class="login-button">Already have an account? Log In</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
