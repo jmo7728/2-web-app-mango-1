@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Friends List</title>
+    <link rel="stylesheet" type="text/css" href="styles/social.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+    <div class="container">
+        <nav class="navtop">
+            <!--Flask route to pomodoro.html-->
+            <a href="/home">Home</a>
+            <!--Current route to social-->
+            <a href="/social" class="active">Friends</a>
+            <!--Flask route to history.html-->
+            <a href="/pomodoro">Tasks</a>
+            <!--Flask route to index.html-->
+            <a href="/index">Log Out</a>
+        </nav>
+
+        <header class="title">
+            <h1>Your Friends</h1>
+            <p class="tagline">Connect, compete, and stay motivated together!</p>
+        </header>
+
+        <div class="card-container">
+            <div class="card">
+                <h2>Friends List</h2>
+                <ul class="friends-list">
+                    <li>Friend 1</li>
+                    <li>Friend 2</li>
+                    <li>Friend 3</li>
+                    <li>Friend 4</li>
+                    <li>Friend 5</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Leaderboard</h2>
+                <ol class="leaderboard">
+                    <li><strong>Friend 1</strong> - 15 Tasks Completed</li>
+                    <li><strong>Friend 2</strong> - 12 Tasks Completed</li>
+                    <li><strong>Friend 3</strong> - 10 Tasks Completed</li>
+                    <li><strong>Friend 4</strong> - 8 Tasks Completed</li>
+                    <li><strong>Friend 5</strong> - 5 Tasks Completed</li>
+                </ol>
+            </div>
+        </div> 
+    </div>
+</body>
+</html>

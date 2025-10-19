@@ -1,0 +1,64 @@
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <title>Pomodoro App</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="styles/index.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="title">
+                <h1>Welcome to the Pomodoro app!</h1>
+            </div>
+            <div class="description">
+                <p>This app helps you manage your tasks using the Pomodoro technique.</p>
+                <p>You can also connect with friends and see a leaderboard of task completions!</p>
+            </div>
+            <div class="login">
+                <p>Please Log In Here</p>
+                <form action="/home" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required><br><br>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required><br><br>
+                    <input class="submit" type="submit" value="Log In">
+                    <a href="/sign-up" class="sign-up-button">Sign Up</a>
+                </form>
+            </div>
+        </div>
+    </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pomodoro App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+</head>
+<body>
+    <div class="container">
+        <header class="title">
+            <h1>Pomodoro App</h1>
+            <p class="tagline">Boost productivity with focused intervals!</p>
+        </header>
+
+        <div class="login-card">
+            <!-- Route to home.html on successful submit -->
+            <form action="/home" method="post">
+                <label for="username">Username</label>
+                <input class="text type="text" id="username" name="username" placeholder="Enter username" required>
+
+                <label for="password">Password</label>
+                <input class="password" type="password" id="password" name="password" placeholder="Enter password" required>
+
+                <button class="submit" type="submit">Log In</button>
+                <!-- Set up Route to signup.html -->
+                <a href="/sign-up" class="sign-up-button">Sign Up</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
