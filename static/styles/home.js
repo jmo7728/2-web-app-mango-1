@@ -1,43 +1,36 @@
-
-let timer=null;
+let timer;
 let isRunning=false;
-let isWork=true;
+let isWorkSession=true;
 let timeLeft=25*60;
 
-const display=document.getElementById("display");
-const startBtn=document.getElementById("start");
-const pauseBtn=document.getElementById("pause");
-const resetBtn=document.getElementById("reset");
-const workInput=document.getElementById("work");
-const breakInput=document.getElementById("break");
+const display=document.getElementById('display');
+const startBtn=document.getElementById('start');
+const pauseBtn=document.getElementById('pause');
+const resetBtn=document.getElementById('reset');
+const workInput=document.getElementById('work');
+const breakInput=document.getElementById('break');
 
-function updateDisplay(){
-  let min=Math.floor(timeLeft/60);
-  let sec=timeLeft%60;
-  display.textContent=`${String(min).padStart(2,"0")}:${String(sec).padStart(2, "0")}`;
+function updateDisplay() {
+  const minutes=Math.floor(timeLeft/60);
+  const seconds=timeLeft % 60;
+  display.textContent = `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
 }
 
 function startTimer(){
   if (isRunning) return;
-
   isRunning=true;
-  timer=setInterval(()=>{
-    if (timeLeft>0){
+  timer = setInterval(()=>{
+    if (timeLeft>0) {
       timeLeft--;
       updateDisplay();
     } else {
       clearInterval(timer);
       isRunning=false;
-
-      alert(isWork?"Study time's up! Break time!":"Break over! Back to work!");
-      
-
-      isWork=!isWork;
-      timeLeft=(isWork?parseInt(workInput.value)||25:parseInt(breakInput.value) || 5) * 60;
-      updateDisplay();
+      alert(isWorkSession?"Work session done! Break time ⏸" : "Break done! Back to work 💪");
+      switchSession();
       startTimer();
     }
-  },1000);
+  }, 1000);
 }
 
 function pauseTimer(){
@@ -48,27 +41,35 @@ function pauseTimer(){
 function resetTimer(){
   clearInterval(timer);
   isRunning=false;
-  isWork=true;
-  timeLeft=(parseInt(workInput.value)||25)*60;
+  isWorkSession=true;
+  timeLeft=parseInt(workInput.value)*60;
   updateDisplay();
 }
 
-startBtn.addEventListener("click",startTimer);
-pauseBtn.addEventListener("click",pauseTimer);
-resetBtn.addEventListener("click",resetTimer);
+function switchSession() {
+  isWorkSession=!isWorkSession;
+  timeLeft=(isWorkSession?parseInt(workInput.value):parseInt(breakInput.value))*60;
+  updateDisplay();
+}
 
-workInput.addEventListener("change",() =>{
-  if (!isRunning&&isWork) {
-    timeLeft=(parseInt(workInput.value)||25)*60;
+
+startBtn.addEventListener('click',startTimer);
+pauseBtn.addEventListener('click',pauseTimer);
+resetBtn.addEventListener('click',resetTimer);
+
+workInput.addEventListener('change',()=>{
+  if (!isRunning&&isWorkSession){
+    timeLeft=parseInt(workInput.value)*60;
     updateDisplay();
   }
 });
 
-breakInput.addEventListener("change",() => {
-  if (!isRunning&&!isWork) {
-    timeLeft=(parseInt(breakInput.value)||5)*60;
+breakInput.addEventListener('change',()=>{
+  if (!isRunning&&!isWorkSession){
+    timeLeft=parseInt(breakInput.value)*60;
     updateDisplay();
   }
 });
+
 
 updateDisplay();
