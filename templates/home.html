@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Pomodoro App{% endblock %}
+
+{% block content %}
+<div class="timer">
+    <div class="display" id="display">25:00</div>
+
+
+    <div class="controls">
+        <button id="start">Start</button>
+        <button id="pause">Pause</button>
+        <button id="reset">Reset</button>
+    </div>
+</div>
+
+<div class="settings">
+    <h2>Session Settings</h2>
+    <label for="work">Study Length (minutes)</label>
+    <input type="number" id="work" placeholder="25">
+
+    <label for="break">Break Length (minutes)</label>
+    <input type="number" id="break" placeholder="5">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='styles/home.js') }}"></script>
+
+{% endblock %}
