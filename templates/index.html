@@ -32,33 +32,88 @@
 
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Pomodoro App</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/static/styles/index.css">
-</head>
-<body>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/static/styles/index.css" />
+  </head>
+  <body>
     <div class="container">
-        <header class="title">
-            <h1>Pomodoro App</h1>
-            <p class="tagline">Boost productivity with focused intervals!</p>
-        </header>
+      <header class="title">
+        <h1>Pomodoro App</h1>
+        <p class="tagline">Boost productivity with focused intervals!</p>
+      </header>
 
-        <div class="login-card">
-            <!-- Route to home.html on successful submit -->
-            <form action="/home" method="post">
-                <label for="username">Username</label>
-                <input class="text type="text" id="username" name="username" placeholder="Enter username" required>
+      <div class="login-card">
+        <form id="loginForm">
+          <label for="username">Username or Email</label>
+          <input
+            class="text"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter username or email"
+            required
+          />
 
-                <label for="password">Password</label>
-                <input class="password" type="password" id="password" name="password" placeholder="Enter password" required>
+          <label for="password">Password</label>
+          <input
+            class="password"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter password"
+            required
+          />
 
-                <button class="submit" type="submit">Log In</button>
-                <!-- Set up Route to signup.html -->
-                <a href="/sign-up" class="sign-up-button">Sign Up</a>
-            </form>
-        </div>
+          <button class="submit" type="submit">Log In</button>
+
+          <a href="/sign-up" class="sign-up-button">Sign Up</a>
+        </form>
+        <div
+          id="error-message"
+          style="color: red; margin-top: 10px; display: none"
+        ></div>
+      </div>
+
+      <script>
+        document
+          .getElementById("loginForm")
+          .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const data = {
+              username: formData.get("username"),
+              password: formData.get("password"),
+            };
+
+            try {
+              const response = await fetch("/auth/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+
+              const result = await response.json();
+
+              if (response.ok) {
+                window.location.href = "/home";
+              } else {
+                const errorDiv = document.getElementById("error-message");
+                errorDiv.textContent = result.error || "Login failed";
+                errorDiv.style.display = "block";
+              }
+            } catch (error) {
+              const errorDiv = document.getElementById("error-message");
+              errorDiv.textContent = "Network error. Please try again.";
+              errorDiv.style.display = "block";
+            }
+          });
+      </script>
     </div>
-</body>
+  </body>
 </html>

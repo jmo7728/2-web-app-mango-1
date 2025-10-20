@@ -8,10 +8,10 @@ flask-debugtoolbar = "*"
 dotenv = "*"
 flask = "*"
 flask-login = "*"
-pymongo = "*"
 python-dotenv = "*"
 werkzeug = "*"
 certifi = "*"
+pymongo = "*"
 
 [dev-packages]
 
