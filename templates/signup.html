@@ -1,31 +1,97 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Sign Up - Pomodoro App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/static/styles/signup.css">
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/static/styles/signup.css" />
+  </head>
+  <body>
     <div class="container">
-        <header class="title">
-            <h1>Create an Account</h1>
-            <p class="tagline">Join and start your productivity journey!</p>
-        </header>
+      <header class="title">
+        <h1>Create an Account</h1>
+        <p class="tagline">Join and start your productivity journey!</p>
+      </header>
 
-        <div class="signup-card">
-            <!-- Flask route to home page -->
-            <form action="/home" method="post">
-                <label for="username">Username</label>
-                <input class="text" type="text" id="username" name="username" placeholder="Enter username" required>
+      <div class="signup-card">
+        <form id="signupForm">
+          <label for="username">Username</label>
+          <input
+            class="text"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter username"
+            required
+          />
 
-                <label for="password">Password</label>
-                <input class="password" type="password" id="password" name="password" placeholder="Enter password" required>
+          <label for="email">Email</label>
+          <input
+            class="text"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter email"
+            required
+          />
 
-                <button class="submit" type="submit">Sign Up</button>
-                <a href="/login" class="login-button">Already have an account? Log In</a>
-            </form>
-        </div>
+          <label for="password">Password</label>
+          <input
+            class="password"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter password"
+            required
+          />
+
+          <button class="submit" type="submit">Sign Up</button>
+          <a href="/" class="login-button">Already have an account? Log In</a>
+        </form>
+        <div
+          id="error-message"
+          style="color: red; margin-top: 10px; display: none"
+        ></div>
+      </div>
+
+      <script>
+        document
+          .getElementById("signupForm")
+          .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const data = {
+              username: formData.get("username"),
+              email: formData.get("email"),
+              password: formData.get("password"),
+            };
+
+            try {
+              const response = await fetch("/auth/register", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+
+              const result = await response.json();
+
+              if (response.ok) {
+                window.location.href = "/home";
+              } else {
+                const errorDiv = document.getElementById("error-message");
+                errorDiv.textContent = result.error || "Registration failed";
+                errorDiv.style.display = "block";
+              }
+            } catch (error) {
+              const errorDiv = document.getElementById("error-message");
+              errorDiv.textContent = "Network error. Please try again.";
+              errorDiv.style.display = "block";
+            }
+          });
+      </script>
     </div>
-</body>
+  </body>
 </html>

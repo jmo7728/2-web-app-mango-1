@@ -1,105 +1,296 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+.social-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
-body {
-    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 20px;
-    height: 100vh;
+.tabs {
+  display: flex;
+  margin-bottom: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.container {
-    max-width: 600px;
-    width: 100%;
+.tab-button {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  color: #666;
 }
 
-
-.navtop {
-    background: white;
-    margin-bottom: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    display: flex;
-    justify-content: space-around;
-    padding: 12px;
+.tab-button.active {
+  background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  color: white;
 }
 
-.navtop a {
-    text-decoration: none;
-    color: grey;
-    font-weight: 500;
-    transition: color 0.3s, transform 0.2s;
+.tab-button:hover:not(.active) {
+  background: #f5f5f5;
 }
 
-.navtop a:hover {
-    color: blue;
+.tab-content {
+  display: none;
 }
 
-.title {
-    text-align: center;
-    margin-bottom: 25px;
-    color: white;
+.tab-content.active {
+  display: block;
 }
-
-.title h1 {
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.tagline {
-    font-size: 1rem;
-    margin-top: 5px;
-    color: white;
-}
-
 
 .card {
-    background: white;
-    border-radius: 15px;
-    padding: 25px 20px;
-    margin-bottom: 20px;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card h2 {
-    margin-bottom: 15px;
-    color: #333;
-    text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.2rem;
 }
 
-.friends-list, .leaderboard {
-    padding-left: 0;
-    font-size: 1rem;
-    color: #555;
+.leaderboard-subtitle {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
-.friends-list {
-    list-style: none;
+.form-group {
+  margin-bottom: 1rem;
 }
 
-.friends-list li, .leaderboard li {
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555;
 }
 
-.leaderboard li strong {
-    color: blue;
-}
-.card-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;              
-}
-
-.card-container .card {
-    flex: 1;
-    margin-bottom: 0;       
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
 }
 
+.form-group input:focus {
+  outline: none;
+  border-color: #a1c4fd;
+}
+
+.submit {
+  background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.submit:hover {
+  transform: translateY(-1px);
+}
+
+.submit:active {
+  transform: translateY(0);
+}
+
+.message {
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.message.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.message.hidden {
+  display: none;
+}
+
+.friend-requests,
+.friends-list,
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.friend-request,
+.friend-item,
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.friend-request {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.request-info,
+.friend-info,
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.requester-name,
+.friend-name,
+.username {
+  font-weight: 600;
+  color: #333;
+}
+
+.request-date,
+.friend-stats,
+.study-time {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.request-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.accept-request,
+.decline-request,
+.remove-friend {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.accept-request {
+  background: #28a745;
+  color: white;
+}
+
+.decline-request {
+  background: #dc3545;
+  color: white;
+}
+
+.remove-friend {
+  background: #6c757d;
+  color: white;
+}
+
+.accept-request:hover,
+.decline-request:hover,
+.remove-friend:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.leaderboard-item {
+  position: relative;
+}
+
+.leaderboard-item.top-three {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border-color: #ffc107;
+}
+
+.rank {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #666;
+  min-width: 2rem;
+}
+
+.medal {
+  font-size: 1.5rem;
+}
+
+.empty-state {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+  .social-container {
+    padding: 0.5rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .tab-button {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .friend-request,
+  .friend-item,
+  .leaderboard-item {
+    padding: 0.75rem;
+  }
+
+  .request-actions {
+    flex-direction: column;
+  }
+
+  .accept-request,
+  .decline-request,
+  .remove-friend {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .social-container {
+    padding: 0.25rem;
+  }
+
+  .card {
+    padding: 0.75rem;
+  }
+
+  .tab-button {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.85rem;
+  }
+}

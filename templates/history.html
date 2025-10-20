@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>History — Pomodoro</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/home.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/history.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="topbar">
+        <button id="backBtn" class="icon-btn" aria-label="Back">←</button>
+        <h1>History</h1>
+        <button id="addQuickBtn" class="icon-btn" aria-label="Add session">
+          ＋
+        </button>
+      </div>
+
+      <div class="card">
+        <input
+          id="searchInput"
+          class="text"
+          placeholder="Search by title, type, or date (YYYY-MM-DD)"
+        />
+      </div>
+
+      <div id="historyList" class="history-list"></div>
+
+      <div id="emptyState" class="empty-state hidden card">
+        <p>No sessions yet. Tap + to add one.</p>
+      </div>
+    </div>
+
+    <div
+      id="modal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
+      <div class="modal-content card">
+        <h2 id="modalTitle">Edit session</h2>
+        <form id="sessionForm">
+          <input type="hidden" id="sessionId" />
+
+          <label
+            >Title
+            <input id="title" class="text" name="title" type="text" required />
+          </label>
+
+          <label
+            >Date
+            <input id="date" class="text" name="date" type="date" required />
+          </label>
+
+          <label
+            >Duration (minutes)
+            <input
+              id="duration"
+              class="text"
+              name="duration"
+              type="number"
+              min="1"
+              required
+            />
+          </label>
+
+          <label
+            >Type
+            <input
+              id="type"
+              class="text"
+              name="type"
+              placeholder="pomodoro, deep-work..."
+            />
+          </label>
+
+          <label
+            >Notes
+            <textarea id="notes" class="text" name="notes" rows="3"></textarea>
+          </label>
+
+          <div class="modal-actions">
+            <button type="button" id="deleteBtn" class="danger">Delete</button>
+            <div style="flex: 1"></div>
+            <button type="button" id="cancelBtn" class="login-button">
+              Cancel
+            </button>
+            <button type="submit" id="saveBtn" class="submit primary">
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "/api";
+    </script>
+    <script src="{{ url_for('static', filename='styles/history.js') }}"></script>
+  </body>
+</html>

@@ -1,51 +1,298 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Friends List</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles/social.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<body>
-    <div class="container">
-        <nav class="navtop">
-            <!--Flask route to pomodoro.html-->
-            <a href="/home">Home</a>
-            <!--Current route to social-->
-            <a href="/social" class="active">Friends</a>
-            <!--Flask route to history.html-->
-            <a href="/pomodoro">Tasks</a>
-            <!--Flask route to index.html-->
-            <a href="/index">Log Out</a>
-        </nav>
+{% extends "base.html" %} {% block title %}Social - Pomodoro App{% endblock %}
+{% block content %}
+<div class="social-container">
+  <div class="tabs">
+    <button class="tab-button active" data-tab="friends">Friends</button>
+    <button class="tab-button" data-tab="leaderboard">Leaderboard</button>
+  </div>
 
-        <header class="title">
-            <h1>Your Friends</h1>
-            <p class="tagline">Connect, compete, and stay motivated together!</p>
-        </header>
-
-        <div class="card-container">
-            <div class="card">
-                <h2>Friends List</h2>
-                <ul class="friends-list">
-                    <li>Friend 1</li>
-                    <li>Friend 2</li>
-                    <li>Friend 3</li>
-                    <li>Friend 4</li>
-                    <li>Friend 5</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h2>Leaderboard</h2>
-                <ol class="leaderboard">
-                    <li><strong>Friend 1</strong> - 15 Tasks Completed</li>
-                    <li><strong>Friend 2</strong> - 12 Tasks Completed</li>
-                    <li><strong>Friend 3</strong> - 10 Tasks Completed</li>
-                    <li><strong>Friend 4</strong> - 8 Tasks Completed</li>
-                    <li><strong>Friend 5</strong> - 5 Tasks Completed</li>
-                </ol>
-            </div>
-        </div> 
+  <!-- Friends Tab -->
+  <div id="friends-tab" class="tab-content active">
+    <div class="card">
+      <h2>Add Friends</h2>
+      <form id="addFriendForm">
+        <div class="form-group">
+          <label for="friendUsername">Username or Email</label>
+          <input
+            type="text"
+            id="friendUsername"
+            placeholder="Enter friend's username or email"
+            required
+          />
+        </div>
+        <button type="submit" class="submit">Send Friend Request</button>
+      </form>
+      <div id="friendMessage" class="message hidden"></div>
     </div>
-</body>
-</html>
+
+    <div class="card">
+      <h2>Friend Requests</h2>
+      <div id="friendRequests" class="friend-requests">
+        <p class="empty-state">No pending requests</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>My Friends</h2>
+      <div id="friendsList" class="friends-list">
+        <p class="empty-state">No friends yet</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard Tab -->
+  <div id="leaderboard-tab" class="tab-content">
+    <div class="card">
+      <h2>Study Leaderboard</h2>
+      <p class="leaderboard-subtitle">Ranked by total study minutes</p>
+      <div id="leaderboard" class="leaderboard">
+        <div class="loading">Loading leaderboard...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  class SocialManager {
+    constructor() {
+      this.initializeElements();
+      this.bindEvents();
+      this.loadFriends();
+      this.loadLeaderboard();
+    }
+
+    initializeElements() {
+      this.tabButtons = document.querySelectorAll(".tab-button");
+      this.tabContents = document.querySelectorAll(".tab-content");
+      this.addFriendForm = document.getElementById("addFriendForm");
+      this.friendUsername = document.getElementById("friendUsername");
+      this.friendMessage = document.getElementById("friendMessage");
+      this.friendRequests = document.getElementById("friendRequests");
+      this.friendsList = document.getElementById("friendsList");
+      this.leaderboard = document.getElementById("leaderboard");
+    }
+
+    bindEvents() {
+      this.tabButtons.forEach((button) => {
+        button.addEventListener("click", () =>
+          this.switchTab(button.dataset.tab)
+        );
+      });
+
+      this.addFriendForm.addEventListener("submit", (e) => this.addFriend(e));
+    }
+
+    switchTab(tabName) {
+      this.tabButtons.forEach((btn) => btn.classList.remove("active"));
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add("active");
+
+      this.tabContents.forEach((content) => content.classList.remove("active"));
+      document.getElementById(`${tabName}-tab`).classList.add("active");
+
+      if (tabName === "leaderboard") {
+        this.loadLeaderboard();
+      }
+    }
+
+    async addFriend(e) {
+      e.preventDefault();
+      const username = this.friendUsername.value.trim();
+
+      if (!username) return;
+
+      try {
+        const response = await fetch("/api/friends/request", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          this.showMessage("Friend request sent successfully!", "success");
+          this.friendUsername.value = "";
+        } else {
+          this.showMessage(
+            result.error || "Failed to send friend request",
+            "error"
+          );
+        }
+      } catch (error) {
+        this.showMessage("Network error. Please try again.", "error");
+      }
+    }
+
+    showMessage(text, type) {
+      this.friendMessage.textContent = text;
+      this.friendMessage.className = `message ${type}`;
+      this.friendMessage.classList.remove("hidden");
+
+      setTimeout(() => {
+        this.friendMessage.classList.add("hidden");
+      }, 3000);
+    }
+
+    async loadFriends() {
+      try {
+        const response = await fetch("/api/friends");
+        const data = await response.json();
+
+        if (response.ok) {
+          this.renderFriends(data.friends);
+          this.renderFriendRequests(data.requests);
+        }
+      } catch (error) {}
+    }
+
+    renderFriends(friends) {
+      if (friends.length === 0) {
+        this.friendsList.innerHTML =
+          '<p class="empty-state">No friends yet</p>';
+        return;
+      }
+
+      this.friendsList.innerHTML = friends
+        .map(
+          (friend) => `
+      <div class="friend-item">
+        <div class="friend-info">
+          <span class="friend-name">${friend.username}</span>
+          <span class="friend-stats">${
+            friend.totalMinutes || 0
+          } min studied</span>
+        </div>
+        <button class="remove-friend" data-friend-id="${
+          friend._id
+        }">Remove</button>
+      </div>
+    `
+        )
+        .join("");
+
+      this.friendsList.querySelectorAll(".remove-friend").forEach((btn) => {
+        btn.addEventListener("click", (e) =>
+          this.removeFriend(e.target.dataset.friendId)
+        );
+      });
+    }
+
+    renderFriendRequests(requests) {
+      if (requests.length === 0) {
+        this.friendRequests.innerHTML =
+          '<p class="empty-state">No pending requests</p>';
+        return;
+      }
+
+      this.friendRequests.innerHTML = requests
+        .map(
+          (request) => `
+      <div class="friend-request">
+        <div class="request-info">
+          <span class="requester-name">${request.from.username}</span>
+          <span class="request-date">${new Date(
+            request.created_at
+          ).toLocaleDateString()}</span>
+        </div>
+        <div class="request-actions">
+          <button class="accept-request" data-request-id="${
+            request._id
+          }">Accept</button>
+          <button class="decline-request" data-request-id="${
+            request._id
+          }">Decline</button>
+        </div>
+      </div>
+    `
+        )
+        .join("");
+
+      this.friendRequests.querySelectorAll(".accept-request").forEach((btn) => {
+        btn.addEventListener("click", (e) =>
+          this.respondToRequest(e.target.dataset.requestId, "accept")
+        );
+      });
+
+      this.friendRequests
+        .querySelectorAll(".decline-request")
+        .forEach((btn) => {
+          btn.addEventListener("click", (e) =>
+            this.respondToRequest(e.target.dataset.requestId, "decline")
+          );
+        });
+    }
+
+    async respondToRequest(requestId, action) {
+      try {
+        const response = await fetch(`/api/friends/request/${requestId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ action }),
+        });
+
+        if (response.ok) {
+          this.loadFriends();
+        }
+      } catch (error) {}
+    }
+
+    async removeFriend(friendId) {
+      if (!confirm("Are you sure you want to remove this friend?")) return;
+
+      try {
+        const response = await fetch(`/api/friends/${friendId}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          this.loadFriends();
+        }
+      } catch (error) {}
+    }
+
+    async loadLeaderboard() {
+      try {
+        const response = await fetch("/api/leaderboard");
+        const data = await response.json();
+
+        if (response.ok) {
+          this.renderLeaderboard(data);
+        }
+      } catch (error) {}
+    }
+
+    renderLeaderboard(leaderboard) {
+      if (leaderboard.length === 0) {
+        this.leaderboard.innerHTML =
+          '<p class="empty-state">No data available</p>';
+        return;
+      }
+
+      this.leaderboard.innerHTML = leaderboard
+        .map(
+          (user, index) => `
+      <div class="leaderboard-item ${index < 3 ? "top-three" : ""}">
+        <div class="rank">${index + 1}</div>
+        <div class="user-info">
+          <span class="username">${user.username}</span>
+          <span class="study-time">${user.totalMinutes} minutes</span>
+        </div>
+        <div class="medal">
+          ${index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : ""}
+        </div>
+      </div>
+    `
+        )
+        .join("");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    new SocialManager();
+  });
+</script>
+{% endblock %}

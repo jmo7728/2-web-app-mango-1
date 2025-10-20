@@ -1,30 +1,54 @@
-{% extends "base.html" %}
-
-{% block title %}Pomodoro App{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Pomodoro App{% endblock %} {% block
+content %}
 <div class="timer">
-    <div class="display" id="display">25:00</div>
+  <div class="display" id="display">25:00</div>
+  <div class="timer-status" id="timerStatus">Ready to start</div>
 
-
-    <div class="controls">
-        <button id="start">Start</button>
-        <button id="pause">Pause</button>
-        <button id="reset">Reset</button>
-    </div>
+  <div class="controls">
+    <button id="start">Start</button>
+    <button id="pause" disabled>Pause</button>
+    <button id="restart">Restart</button>
+  </div>
 </div>
 
 <div class="settings">
-    <h2>Session Settings</h2>
+  <h2>Session Settings</h2>
+
+  <div class="setting-group">
+    <label for="intervals">Number of Intervals</label>
+    <input type="number" id="intervals" min="1" max="10" value="4" />
+  </div>
+
+  <div class="setting-group">
     <label for="work">Study Length (minutes)</label>
-    <input type="number" id="work" placeholder="25">
+    <input type="number" id="work" min="1" max="60" value="25" />
+  </div>
 
+  <div class="setting-group">
     <label for="break">Break Length (minutes)</label>
-    <input type="number" id="break" placeholder="5">
+    <input type="number" id="break" min="1" max="30" value="5" />
+  </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
+<div class="progress hidden" id="progressSection">
+  <h3>Progress</h3>
+  <div class="progress-info">
+    <span id="currentInterval">Interval: 0/4</span>
+    <span id="timeRemaining">Time: 25:00</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</div>
+
+<div id="alertModal" class="modal hidden">
+  <div class="modal-content">
+    <h2 id="alertTitle">Session Complete!</h2>
+    <p id="alertMessage">Great work! Time for a break.</p>
+    <button id="alertOk" class="submit">Continue</button>
+  </div>
+</div>
+
+{% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='styles/home.js') }}"></script>
-
 {% endblock %}
