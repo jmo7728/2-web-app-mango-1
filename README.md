@@ -4,8 +4,7 @@ A little exercise to build a web application following an agile development proc
 
 ## Product vision statement
 
-See instructions. Delete this line and place the Product Vision Statement here.
-
+A social productivity app that helps students stay focused and accountable through customizable Pomodoro sessions, personal analytics, and friendly weekly leaderboards that turn studying into a shared, motivated experience.
 ## User stories
 
 1. As an organized student, I want to keep track of how much time I spend studying a day and the amount of breaks I take, so that I can guage my productivity.
